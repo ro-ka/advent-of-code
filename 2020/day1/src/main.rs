@@ -1,7 +1,5 @@
-use std::fs;
-
 fn main() {
-    let numbers = read_file().unwrap();
+    let numbers = helper::read_file_i32s().unwrap();
 
     part1(&numbers);
     part2(&numbers);
@@ -35,12 +33,4 @@ fn part2(numbers: &Vec<i32>) {
             }
         }
     }
-}
-
-fn read_file() -> std::io::Result<Vec<i32>> {
-    let data = fs::read_to_string("input.txt")?
-        .lines()
-        .map(|v| v.parse::<i32>().unwrap())
-        .collect();
-    return Ok(data);
 }

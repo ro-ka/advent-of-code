@@ -1,5 +1,5 @@
 [package]
-name = "day2"
+name = "helper"
 version = "0.1.0"
 authors = ["Robert Katzki <robert@katzki.de>"]
 edition = "2018"
@@ -7,5 +7,3 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-helper = { path = "../helper" }
-regex = "1"
