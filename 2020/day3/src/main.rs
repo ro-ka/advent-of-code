@@ -11,7 +11,7 @@ fn part1(entries: &Vec<String>) {
 }
 
 fn part2(entries: &Vec<String>) {
-    let slopes: Vec<(usize, usize)> = vec![(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
+    let slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
     let hit_trees_per_slope: usize = slopes
         .iter()
         .map(|s| get_hit_trees_for_slope(entries, s))
