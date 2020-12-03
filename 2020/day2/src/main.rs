@@ -1,27 +1,20 @@
 use regex::Regex;
 
-struct Entry {
-    min: usize,
-    max: usize,
-    letter: char,
-    password: String,
-}
-
 fn main() {
     let raw_entries = helper::read_file_strings().unwrap();
 
     let re = Regex::new(r"^(\d+)-(\d+) ([a-z]{1}): ([a-z]+)$").unwrap();
 
-    let entries: Vec<Entry> = raw_entries
+    let entries: Vec<(usize, usize, char, String)> = raw_entries
         .iter()
         .map(|entry| {
             let cap = re.captures(entry).unwrap();
-            return Entry {
-                min: cap[1].parse::<usize>().unwrap(),
-                max: cap[2].parse::<usize>().unwrap(),
-                letter: cap[3].to_string().chars().nth(0).unwrap(),
-                password: cap[4].to_string(),
-            };
+            (
+                cap[1].parse::<usize>().unwrap(),
+                cap[2].parse::<usize>().unwrap(),
+                cap[3].to_string().chars().nth(0).unwrap(),
+                cap[4].to_string(),
+            )
         })
         .collect();
 
@@ -29,28 +22,24 @@ fn main() {
     part2(&entries);
 }
 
-fn part1(entries: &Vec<Entry>) {
+fn part1(entries: &Vec<(usize, usize, char, String)>) {
     let valid_passwords = entries
         .iter()
-        .filter(|entry| {
-            let letter_count = entry
-                .password
-                .chars()
-                .filter(|c| c == &entry.letter)
-                .count();
-            return letter_count >= entry.min && letter_count <= entry.max;
+        .map(|(min, max, letter, password)| {
+            (min, max, password.chars().filter(|c| c == letter).count())
         })
+        .filter(|(min, max, letter_count)| letter_count >= min && letter_count <= max)
         .count();
 
     println!("Part 1: {} valid passwords.", valid_passwords);
 }
 
-fn part2(entries: &Vec<Entry>) {
+fn part2(entries: &Vec<(usize, usize, char, String)>) {
     let valid_passwords = entries
         .iter()
-        .filter(|entry| {
-            entry.password.chars().nth(entry.min) == Some(entry.letter)
-                || entry.password.chars().nth(entry.max) == Some(entry.letter)
+        .filter(|(min, max, letter, password)| {
+            password.chars().nth(*min) == Some(*letter)
+                || password.chars().nth(*max) == Some(*letter)
         })
         .count();
 
