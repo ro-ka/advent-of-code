@@ -40,26 +40,14 @@ fn part2(passports: &Vec<Vec<Vec<String>>>) {
         .iter()
         .filter(|rules| {
             rules.iter().all(|rule| match rule[0].as_str() {
-                "byr" => match rule[1].parse::<usize>() {
-                    Ok(year) => year >= 1920 && year <= 2002,
-                    Err(_) => false,
-                },
-                "iyr" => match rule[1].parse::<usize>() {
-                    Ok(year) => year >= 2010 && year <= 2020,
-                    Err(_) => false,
-                },
-                "eyr" => match rule[1].parse::<usize>() {
-                    Ok(year) => year >= 2020 && year <= 2030,
-                    Err(_) => false,
-                },
+                "byr" => validate_range(&rule[1], 1920, 2002),
+                "iyr" => validate_range(&rule[1], 2010, 2020),
+                "eyr" => validate_range(&rule[1], 2020, 2030),
                 "hgt" => match hgt_re.captures(&rule[1]) {
-                    Some(cap) => match cap[1].parse::<usize>() {
-                        Ok(height) => match &cap[2] {
-                            "cm" => height >= 150 && height <= 193,
-                            "in" => height >= 59 && height <= 76,
-                            _ => false,
-                        },
-                        Err(_) => false,
+                    Some(cap) => match &cap[2] {
+                        "cm" => validate_range(&cap[1].to_string(), 150, 193),
+                        "in" => validate_range(&cap[1].to_string(), 59, 76),
+                        _ => false,
                     },
                     None => false,
                 },
@@ -71,4 +59,11 @@ fn part2(passports: &Vec<Vec<Vec<String>>>) {
         })
         .collect();
     println!("Part 2: {}.", valid_passports.len());
+}
+
+fn validate_range(value: &String, min: usize, max: usize) -> bool {
+    match value.parse::<usize>() {
+        Ok(number) => number >= min && number <= max,
+        Err(_) => false,
+    }
 }
