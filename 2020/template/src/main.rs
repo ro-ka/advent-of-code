@@ -6,9 +6,9 @@ fn main() {
 }
 
 fn part1(entries: &Vec<String>) {
-    println!("Part 1: {}.", entries);
+    println!("Part 1: {:?}.", entries);
 }
 
 fn part2(entries: &Vec<String>) {
-    println!("Part 2: {}.", entries);
+    println!("Part 2: {:?}.", entries);
 }
