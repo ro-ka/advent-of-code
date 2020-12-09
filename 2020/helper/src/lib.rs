@@ -8,6 +8,14 @@ pub fn read_file_i32s() -> std::io::Result<Vec<i32>> {
     return Ok(data);
 }
 
+pub fn read_file_i64s() -> std::io::Result<Vec<i64>> {
+    let data = fs::read_to_string("input.txt")?
+        .lines()
+        .map(|v| v.parse::<i64>().unwrap())
+        .collect();
+    return Ok(data);
+}
+
 pub fn read_file_to_string() -> std::io::Result<String> {
     fs::read_to_string("input.txt")
 }
