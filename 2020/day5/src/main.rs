@@ -1,17 +1,26 @@
+use std::time::Instant;
+
 fn main() {
+    let mut now = Instant::now();
     let entries = helper::read_file_strings().unwrap();
 
-    let mut seat_ids = entries.iter().map(|l| {
-        let rows: Vec<usize> = (0..=127).collect();
-        let columns: Vec<usize> = (0..=7).collect();
-        let (row_rules, column_rules) = l.split_at(7);
-        let row = find_value(&rows[..], &row_rules);
-        let column = find_value(&columns[..], &column_rules);
-        row * 8 + column
-    }).collect();
+    let mut seat_ids = entries
+        .iter()
+        .map(|l| {
+            let rows: Vec<usize> = (0..=127).collect();
+            let columns: Vec<usize> = (0..=7).collect();
+            let (row_rules, column_rules) = l.split_at(7);
+            let row = find_value(&rows[..], &row_rules);
+            let column = find_value(&columns[..], &column_rules);
+            row * 8 + column
+        })
+        .collect();
 
     part1(&seat_ids);
+    println!("Time: {}µs", now.elapsed().as_micros());
+    now = Instant::now();
     part2(&mut seat_ids);
+    println!("Time: {}µs", now.elapsed().as_micros());
 }
 
 fn part1(seat_ids: &Vec<usize>) {
@@ -30,7 +39,7 @@ fn part2(seat_ids: &mut Vec<usize>) {
     }
 }
 
-fn find_value(numbers: &[usize], rules: &str)-> usize {
+fn find_value(numbers: &[usize], rules: &str) -> usize {
     if numbers.len() == 1 {
         return numbers[0];
     }
@@ -41,6 +50,6 @@ fn find_value(numbers: &[usize], rules: &str)-> usize {
     match current_rule {
         "B" => find_value(end, rest_rules),
         "R" => find_value(end, rest_rules),
-        _ => find_value(start, rest_rules)
+        _ => find_value(start, rest_rules),
     }
 }

@@ -1,8 +1,14 @@
+use std::time::Instant;
+
 fn main() {
+    let mut now = Instant::now();
     let numbers = helper::read_file_i32s().unwrap();
 
     part1(&numbers);
+    println!("Time: {}µs", now.elapsed().as_micros());
+    now = Instant::now();
     part2(&numbers);
+    println!("Time: {}µs", now.elapsed().as_micros());
 }
 
 fn part1(numbers: &Vec<i32>) {

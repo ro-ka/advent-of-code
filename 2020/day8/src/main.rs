@@ -1,6 +1,8 @@
+use std::time::Instant;
 use std::unimplemented;
 
 fn main() {
+    let mut now = Instant::now();
     let entries = helper::read_file_strings().unwrap();
 
     let instructions: Vec<(&str, i32)> = entries
@@ -12,7 +14,10 @@ fn main() {
         .collect();
 
     part1(&instructions);
+    println!("Time: {}µs", now.elapsed().as_micros());
+    now = Instant::now();
     part2(&instructions);
+    println!("Time: {}µs", now.elapsed().as_micros());
 }
 
 fn part1(instructions: &Vec<(&str, i32)>) {

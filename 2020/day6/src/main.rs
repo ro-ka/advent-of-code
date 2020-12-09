@@ -1,6 +1,8 @@
 use std::collections::HashMap;
+use std::time::Instant;
 
 fn main() {
+    let mut now = Instant::now();
     let data = helper::read_file_to_string().unwrap();
 
     let groups_data: Vec<(usize, HashMap<char, usize>)> = data
@@ -20,7 +22,10 @@ fn main() {
         .collect();
 
     part1(&groups_data);
+    println!("Time: {}µs", now.elapsed().as_micros());
+    now = Instant::now();
     part2(&groups_data);
+    println!("Time: {}µs", now.elapsed().as_micros());
 }
 
 fn part1(groups_data: &Vec<(usize, HashMap<char, usize>)>) {

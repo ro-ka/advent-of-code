@@ -1,6 +1,8 @@
 use regex::Regex;
+use std::time::Instant;
 
 fn main() {
+    let mut now = Instant::now();
     let raw_entries = helper::read_file_strings().unwrap();
 
     let re = Regex::new(r"^(\d+)-(\d+) ([a-z]{1}): ([a-z]+)$").unwrap();
@@ -19,7 +21,10 @@ fn main() {
         .collect();
 
     part1(&entries);
+    println!("Time: {}µs", now.elapsed().as_micros());
+    now = Instant::now();
     part2(&entries);
+    println!("Time: {}µs", now.elapsed().as_micros());
 }
 
 fn part1(entries: &Vec<(usize, usize, char, String)>) {

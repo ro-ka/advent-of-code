@@ -1,6 +1,8 @@
 use regex::Regex;
+use std::time::Instant;
 
 fn main() {
+    let mut now = Instant::now();
     let data = helper::read_file_to_string().unwrap();
 
     let required_fields = vec!["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"];
@@ -23,7 +25,10 @@ fn main() {
         .collect();
 
     part1(&passports_with_required_fields);
+    println!("Time: {}µs", now.elapsed().as_micros());
+    now = Instant::now();
     part2(&passports_with_required_fields);
+    println!("Time: {}µs", now.elapsed().as_micros());
 }
 
 fn part1(passports: &Vec<Vec<Vec<String>>>) {

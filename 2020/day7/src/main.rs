@@ -1,7 +1,9 @@
 use regex::Regex;
 use std::collections::HashMap;
+use std::time::Instant;
 
 fn main() {
+    let mut now = Instant::now();
     let entries = helper::read_file_strings().unwrap();
 
     let mut rules: HashMap<String, Vec<(usize, String)>> = HashMap::new();
@@ -26,7 +28,10 @@ fn main() {
     }
 
     part1(&rules);
+    println!("Time: {}µs", now.elapsed().as_micros());
+    now = Instant::now();
     part2(&rules);
+    println!("Time: {}µs", now.elapsed().as_micros());
 }
 
 fn part1(rules: &HashMap<String, Vec<(usize, String)>>) {
