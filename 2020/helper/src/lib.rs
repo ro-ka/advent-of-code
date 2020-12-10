@@ -1,5 +1,13 @@
 use std::fs;
 
+pub fn read_file_usizes() -> std::io::Result<Vec<usize>> {
+    let data = fs::read_to_string("input.txt")?
+        .lines()
+        .map(|v| v.parse::<usize>().unwrap())
+        .collect();
+    return Ok(data);
+}
+
 pub fn read_file_i32s() -> std::io::Result<Vec<i32>> {
     let data = fs::read_to_string("input.txt")?
         .lines()
