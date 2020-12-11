@@ -32,19 +32,40 @@ fn iterate_seating_part(entries: &Vec<Vec<char>>, distance: usize) -> Vec<Vec<ch
 
     for r in 0..rows {
         for c in 0..columns {
-            let r_start = if r > 0 { r - 1 } else { 0 };
-            let r_end = if r < rows - 1 { r + 1 } else { rows - 1 };
+            let adjactent_seats = (1..=distance)
+                .into_iter()
+                .map(|d| {
+                    let r_start = r - d < rows - 1;
+                    let r_end = r + d < rows - 1;
+                    let c_start = c - d < columns - 1;
+                    let c_end = c + d < columns - 1;
 
-            let c_start = if c > 0 { c - 1 } else { 0 };
-            let c_end = if c < columns - 1 { c + 1 } else { columns - 1 };
-
-            let adjactent_seats = &entries[r_start..=r_end]
-                .iter()
-                .map(|r| &r[c_start..=c_end])
+                    vec![
+                        if r_start && c_start {
+                            entries[r - d][c - d]
+                        } else {
+                            '.'
+                        },
+                        if r_start && c_end {
+                            entries[r - d][c + d]
+                        } else {
+                            '.'
+                        },
+                        if r_end && c_start {
+                            entries[r + d][c + d]
+                        } else {
+                            '.'
+                        },
+                        if r_end && c_end {
+                            entries[r + d][c + d]
+                        } else {
+                            '.'
+                        },
+                    ]
+                })
                 .flatten()
-                .filter(|v| **v == '#')
-                .count()
-                - if entries[r][c] == '#' { 1 } else { 0 };
+                .filter(|v| *v == '#')
+                .count();
 
             iterated_entries[r][c] = match entries[r][c] {
                 'L' => match adjactent_seats == 0 {
