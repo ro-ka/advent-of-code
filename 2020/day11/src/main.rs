@@ -14,65 +14,50 @@ fn main() {
 }
 
 fn part1(entries: Vec<Vec<char>>) {
+    println!("Part 1: {:?}.", get_occupied_seats(entries, 4, 1));
+}
+
+fn part2(entries: Vec<Vec<char>>) {
+    println!("Part 2: {:?}.", get_occupied_seats(entries, 5, 100000));
+}
+
+fn get_occupied_seats(entries: Vec<Vec<char>>, to_occupied: usize, distance: usize) -> usize {
     let mut iterated_entries_before = entries.clone();
-    let mut iterated_entries = iterate_seating_part(&iterated_entries_before, 1);
+    let mut iterated_entries = iterate_seating(&iterated_entries_before, to_occupied, distance);
 
     while did_change(&iterated_entries_before, &iterated_entries) {
         iterated_entries_before = iterated_entries.clone();
-        iterated_entries = iterate_seating_part(&iterated_entries, 1);
+        iterated_entries = iterate_seating(&iterated_entries, to_occupied, distance);
     }
 
-    println!("Part 1: {:?}.", count_seats(&iterated_entries));
+    iterated_entries.iter().flatten().filter(|v| **v == '#').count()
 }
 
-fn iterate_seating_part(entries: &Vec<Vec<char>>, distance: usize) -> Vec<Vec<char>> {
+fn iterate_seating(entries: &Vec<Vec<char>>, to_occupied: usize, distance: usize) -> Vec<Vec<char>> {
     let rows = entries.len();
     let columns = entries[0].len();
     let mut iterated_entries: Vec<Vec<char>> = vec![vec!['.'; columns]; rows];
 
     for r in 0..rows {
         for c in 0..columns {
-            let adjactent_seats = (1..=distance)
-                .into_iter()
-                .map(|d| {
-                    let r_start = r - d < rows - 1;
-                    let r_end = r + d < rows - 1;
-                    let c_start = c - d < columns - 1;
-                    let c_end = c + d < columns - 1;
-
-                    vec![
-                        if r_start && c_start {
-                            entries[r - d][c - d]
-                        } else {
-                            '.'
-                        },
-                        if r_start && c_end {
-                            entries[r - d][c + d]
-                        } else {
-                            '.'
-                        },
-                        if r_end && c_start {
-                            entries[r + d][c + d]
-                        } else {
-                            '.'
-                        },
-                        if r_end && c_end {
-                            entries[r + d][c + d]
-                        } else {
-                            '.'
-                        },
-                    ]
-                })
-                .flatten()
-                .filter(|v| *v == '#')
-                .count();
+            let adjacent_seats = vec![
+              get_first_seat_in_direction(&entries, r, c, 1, 1, distance),
+              get_first_seat_in_direction(&entries, r, c, 1, 0, distance),
+              get_first_seat_in_direction(&entries, r, c, 1, -1, distance),
+              get_first_seat_in_direction(&entries, r, c, 0, 1, distance),
+              get_first_seat_in_direction(&entries, r, c, 0, -1, distance),
+              get_first_seat_in_direction(&entries, r, c, -1, 1, distance),
+              get_first_seat_in_direction(&entries, r, c, -1, 0, distance),
+              get_first_seat_in_direction(&entries, r, c, -1, -1, distance),
+            ];
+            let occupied_seats = adjacent_seats.iter().filter(|s| **s == '#').count();
 
             iterated_entries[r][c] = match entries[r][c] {
-                'L' => match adjactent_seats == 0 {
+                'L' => match occupied_seats == 0 {
                     true => '#',
                     false => 'L',
                 },
-                '#' => match adjactent_seats >= 4 {
+                '#' => match occupied_seats >= to_occupied {
                     true => 'L',
                     false => '#',
                 },
@@ -84,14 +69,22 @@ fn iterate_seating_part(entries: &Vec<Vec<char>>, distance: usize) -> Vec<Vec<ch
     iterated_entries
 }
 
+fn get_first_seat_in_direction(entries: &Vec<Vec<char>>, row: usize, column: usize, row_diff: i8, column_diff: i8, distance: usize) -> char {
+  let (mut r, mut c, mut d) = (row + row_diff as usize, column + column_diff as usize, 1);
+
+  while r < entries.len() && c < entries[0].len() && d <= distance {
+      let entry = entries[r][c];
+      if entry == 'L' || entry == '#' {
+        return entry;
+      }
+      r += row_diff as usize;
+      c += column_diff as usize;
+      d += 1;
+  }
+
+  '.'
+}
+
 fn did_change(a: &Vec<Vec<char>>, b: &Vec<Vec<char>>) -> bool {
     a.iter().flatten().collect::<String>() != b.iter().flatten().collect::<String>()
-}
-
-fn count_seats(entries: &Vec<Vec<char>>) -> usize {
-    entries.iter().flatten().filter(|v| **v == '#').count()
-}
-
-fn part2(entries: Vec<Vec<char>>) {
-    println!("Part 2: {:?}.", entries);
 }
