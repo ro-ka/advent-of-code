@@ -45,7 +45,7 @@ fn part2(raw_bus_lines: &str) {
     let rules: Vec<u32> = raw_bus_lines
         .split(",")
         .map(|c| match c {
-            "x" => 0,
+            "x" => 1,
             _ => c.parse::<u32>().unwrap(),
         })
         .collect();
@@ -57,5 +57,11 @@ fn part2(raw_bus_lines: &str) {
             .position(|c| c == max_bus_id)
             .expect("Position of bus id not found!") as u32;
 
-    println!("Part 2: {:?}, {:?}.", start, max_bus_id);
+    let time = (start..)
+        .into_iter()
+        .step_by(*max_bus_id as usize)
+        .inspect(|i| println!("{:?}", i))
+        .find(|i| rules.iter().all(|r| i % r == 0));
+
+    println!("Part 2: {:?}.", time);
 }
