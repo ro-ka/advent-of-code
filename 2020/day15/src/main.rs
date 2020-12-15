@@ -14,8 +14,8 @@ fn main() {
     println!("Time: {}µs", now.elapsed().as_micros());
 }
 
-fn find_number(iterations: u32) -> u32 {
-    let mut occurances: HashMap<u32, u32> = HashMap::new();
+fn find_number(iterations: usize) -> u32 {
+    let mut occurances: HashMap<u32, usize> = HashMap::new();
     let mut latest = 0;
 
     RAW_NUMBERS
@@ -24,7 +24,7 @@ fn find_number(iterations: u32) -> u32 {
         .enumerate()
         .for_each(|(i, n)| {
             latest = n;
-            occurances.insert(n, i as u32);
+            occurances.insert(n, i);
         });
 
     occurances.remove(&latest);
@@ -32,12 +32,12 @@ fn find_number(iterations: u32) -> u32 {
     for i in occurances.len() + 1..iterations as usize {
         match occurances.get(&latest) {
             Some(index) => {
-                let new = i as u32 - 1 - index;
-                occurances.insert(latest, i as u32 - 1);
-                latest = new;
+                let new = i - 1 - index;
+                occurances.insert(latest, i - 1);
+                latest = new as u32;
             }
             None => {
-                occurances.insert(latest, i as u32 - 1);
+                occurances.insert(latest, i - 1);
                 latest = 0;
             }
         }
