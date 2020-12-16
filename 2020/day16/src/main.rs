@@ -99,16 +99,15 @@ fn part2(
         }
     }
 
-    println!("{:?}", rules_indices);
-
     println!(
         "Part 2: {:?}.",
         rules_indices
             .iter()
             .filter(|(name, _)| name.starts_with("departure"))
             .map(|(_, i)| i[0])
-            .map(|i| ticket[i])
-            .product::<u32>()
+            .map(|i| ticket[i] as u64)
+            .inspect(|i| println!("{:?}", i))
+            .product::<u64>()
     );
 }
 
