@@ -18,3 +18,6 @@ The timings for the solutions:
 | [Day 12](https://adventofcode.com/2020/day/12)   | [`1.8ms`](./day12/src/main.rs) | [`0.03ms`](./day12/src/main.rs)  |
 | [Day 14](https://adventofcode.com/2020/day/14)   | [`43ms`](./day14/src/main.rs) | [`82ms`](./day14/src/main.rs)  |
 | [Day 15](https://adventofcode.com/2020/day/15)   | [`0.1ms`](./day15/src/main.rs) | [`2.7s`](./day15/src/main.rs)  |
+| [Day 16](https://adventofcode.com/2020/day/16)   | [`1ms`](./day16/src/main.rs) | [`0.3ms`](./day16/src/main.rs)  |
+| [Day 17](https://adventofcode.com/2020/day/17)   | [`4ms`](./day17/src/main.rs) | [`222ms`](./day17/src/main.rs)  |
+| [Day 18](https://adventofcode.com/2020/day/18)   | [`172ms`](./day18/src/main.rs) | [`304ms`](./day18/src/main.rs)  |
