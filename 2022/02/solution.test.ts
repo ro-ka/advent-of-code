@@ -10,5 +10,5 @@ test('part1 is correct', () => {
 })
 
 test('part2 is correct', () => {
-  expect(part2(exampleInput)).toBe(undefined);
+  expect(part2(exampleInput)).toBe(12);
 })
